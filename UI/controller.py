@@ -8,7 +8,12 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
+
+
     def handleCreaGrafo(self, e):
         pass
     def handleCerca(self, e):
+        pass
+
+    def handleRicorsione(self, e):
         pass
