@@ -6,41 +6,46 @@ class View(ft.UserControl):
         super().__init__()
         # page stuff
         self._page = page
-        self._page.title = "Template application using MVC and DAO"
+        self._page.title = "TdP Lab 14 - simulazione esame"
         self._page.horizontal_alignment = 'CENTER'
-        self._page.theme_mode = ft.ThemeMode.DARK
+        self._page.theme_mode = ft.ThemeMode.LIGHT
+        self._page.bgcolor = "#ebf4f4"
+        self._page.window_height = 800
+        page.window_center()
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
         # graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
-        self.txt_result = None
-        self.txt_container = None
+        self._txt_name = None
+        self._txt_result = None
 
     def load_interface(self):
         # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        self._title = ft.Text("TdP Lab 14 - simulazione esame", color="blue", size=24)
         self._page.controls.append(self._title)
 
-        #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
+        self._ddStore = ft.Dropdown(label="Store")
+        self._txtIntK = ft.TextField(label="Numero giorni massimo K")
+        self._btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handleCreaGrafo)
 
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
-                      alignment=ft.MainAxisAlignment.CENTER)
+        cont = ft.Container(self._ddStore, width=250, alignment=ft.alignment.top_left)
+        row1 = ft.Row([cont, self._txtIntK, self._btnCreaGrafo], alignment=ft.MainAxisAlignment.CENTER,
+                      vertical_alignment=ft.CrossAxisAlignment.END)
+
+        self._btnCerca = ft.ElevatedButton(text="Cerca Percorso Massimo",
+                                           on_click=self._controller.handleCerca)
+
+        self._ddNode = ft.Dropdown(label="Node")
+        cont2 = ft.Container(self._ddNode, width=250, alignment=ft.alignment.top_left)
+        row2 = ft.Row([cont2, ft.Container(self._btnCerca, width=250)
+        ], alignment=ft.MainAxisAlignment.CENTER)
+
         self._page.controls.append(row1)
-
-        # List View where the reply is printed
+        self._page.controls.append(row2)
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result)
         self._page.update()
+
 
     @property
     def controller(self):
@@ -52,12 +57,6 @@ class View(ft.UserControl):
 
     def set_controller(self, controller):
         self._controller = controller
-
-    def create_alert(self, message):
-        dlg = ft.AlertDialog(title=ft.Text(message))
-        self._page.dialog = dlg
-        dlg.open = True
-        self._page.update()
 
     def update_page(self):
         self._page.update()
